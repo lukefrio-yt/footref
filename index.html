@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FootRef</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        
+        <div id="screen-menu" class="screen active">
+            <h1 class="brand-title">FootRef</h1>
+            
+            <button id="btn-go-to-setup" class="btn-start btn-sound">+ Vytvořit nový zápas</button>
+
+            <div class="card margin-top">
+                <h3>📋 Moje zápasy</h3>
+                <div id="matches-list"></div>
+            </div>
+        </div>
+
+        <div id="screen-setup" class="screen">
+            <div class="header-with-back">
+                <button id="btn-back-to-menu" class="btn-back btn-sound">← Zpět</button>
+                <h2>Nový zápas</h2>
+            </div>
+
+            <form id="setup-form">
+                <div class="card">
+                    <h3>Název zápasu</h3>
+                    <input type="text" id="match-name" placeholder="např. Finále turnaje / Zápas A vs B" required class="input-main">
+                </div>
+
+                <div class="card">
+                    <h3>Typ hry a Střídání</h3>
+                    <div class="game-type-grid">
+                        <label class="custom-option active btn-sound" id="opt-gk">
+                            <input type="radio" name="gk_mode" value="with_gk" checked>
+                            <div class="option-content">
+                                <span class="icon">🧤</span>
+                                <span class="label-text">S brankářem</span>
+                            </div>
+                            <div class="check-mark">✓</div>
+                        </label>
+
+                        <label class="custom-option btn-sound" id="opt-last">
+                            <input type="radio" name="gk_mode" value="last_man">
+                            <div class="option-content">
+                                <span class="icon">🏃</span>
+                                <span class="label-text">Na "posledního"</span>
+                            </div>
+                            <div class="check-mark">✓</div>
+                        </label>
+                    </div>
+
+                    <div style="margin-top: 15px;">
+                        <label>Max. počet střídání na část/poločas (pro každý tým):</label>
+                        <input type="number" id="max-subs-per-part" value="3" min="1" max="20" class="input-main" required>
+                    </div>
+                </div>
+
+                <div class="teams-grid">
+                    <div class="card team-card">
+                        <h3>Tým 1</h3>
+                        <label>Název týmu:</label>
+                        <input type="text" id="team1-name" placeholder="Název týmu 1" required class="input-main">
+                        
+                        <div id="gk-container-1" class="gk-box">
+                            <label>Jméno brankáře:</label>
+                            <input type="text" id="team1-gk" placeholder="Jméno brankáře 1" class="input-sub">
+                        </div>
+
+                        <label>Hráči v základu (oddělení čárkou):</label>
+                        <textarea id="team1-players" placeholder="Petr, Pavel, Honza..." rows="3" class="input-sub"></textarea>
+
+                        <label>Náhradníci (oddělení čárkou):</label>
+                        <textarea id="team1-subs" placeholder="Karel, Aleš..." rows="2" class="input-sub"></textarea>
+                    </div>
+
+                    <div class="card team-card">
+                        <h3>Tým 2</h3>
+                        <label>Název týmu:</label>
+                        <input type="text" id="team2-name" placeholder="Název týmu 2" required class="input-main">
+                        
+                        <div id="gk-container-2" class="gk-box">
+                            <label>Jméno brankáře:</label>
+                            <input type="text" id="team2-gk" placeholder="Jméno brankáře 2" class="input-sub">
+                        </div>
+
+                        <label>Hráči v základu (oddělení čárkou):</label>
+                        <textarea id="team2-players" placeholder="Martin, Lukáš, Tomáš..." rows="3" class="input-sub"></textarea>
+
+                        <label>Náhradníci (oddělení čárkou):</label>
+                        <textarea id="team2-subs" placeholder="David, Filip..." rows="2" class="input-sub"></textarea>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Části zápasu a Přestávky</h3>
+                    <div id="parts-container"></div>
+                    <button type="button" id="btn-add-part" class="btn-add btn-sound">+ Přidat další část</button>
+                </div>
+
+                <button type="submit" class="btn-start btn-sound">Uložit a Vytvořit Zápas</button>
+            </form>
+        </div>
+
+        <div id="screen-detail" class="screen">
+            <div class="header-with-back">
+                <button id="btn-back-from-detail" class="btn-back btn-sound">← Zpět do menu</button>
+                <h2 id="detail-title">Detail zápasu</h2>
+            </div>
+            <div id="detail-content"></div>
+        </div>
+
+        <div id="screen-timer" class="screen">
+            <div class="header-with-back">
+                <button id="btn-exit-timer" class="btn-back btn-sound">✕ Opustit</button>
+                <h2 id="timer-match-title">Zápas probíhá</h2>
+            </div>
+
+            <div class="card match-header-card">
+                <div id="timer-part-indicator" class="part-badge">1. Část</div>
+                <div class="teams-scoreboard">
+                    <span id="scoreboard-team1">Tým 1</span>
+                    <span class="vs">VS</span>
+                    <span id="scoreboard-team2">Tým 2</span>
+                </div>
+            </div>
+
+            <div class="card timer-card">
+                <div class="timer-label">ZÁKLADNÍ ČAS</div>
+                <div id="timer-display" class="timer-digits">45:00</div>
+                
+                <div id="added-timer-box" class="added-timer-box hidden">
+                    <div class="added-timer-label">⏱️ NASTAVENÝ ČAS</div>
+                    <div id="added-timer-display" class="added-timer-digits">+00:00</div>
+                </div>
+                
+                <div class="timer-controls">
+                    <button id="btn-toggle-timer" class="btn-timer-ctrl btn-play btn-sound">▶ Spustit</button>
+                    <button id="btn-reset-timer" class="btn-timer-ctrl btn-reset btn-sound">↺ Reset</button>
+                </div>
+
+                <div class="whistle-section">
+                    <div class="whistle-title">📢 PÍŠŤALKA</div>
+                    <div class="whistle-buttons-grid">
+                        <button id="whistle-short" class="btn-whistle btn-sound" onclick="playWhistle('short')">
+                            <span class="symbol">●</span>
+                            <span class="label">Krátké</span>
+                        </button>
+                        <button id="whistle-long" class="btn-whistle btn-sound" onclick="playWhistle('long')">
+                            <span class="symbol">━</span>
+                            <span class="label">Dlouhé</span>
+                        </button>
+                        <button id="whistle-combo" class="btn-whistle btn-sound" onclick="playWhistle('combo')">
+                            <span class="symbol">● ━</span>
+                            <span class="label">Krátké + Dlouhé</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⚽ Skóre / Počítadlo gólů</h3>
+                <div class="goals-counter-wrapper">
+                    <div class="team-goals-box">
+                        <div class="team-goals-title" id="goals-team1-name">Tým 1</div>
+                        <div class="goals-controls">
+                            <button class="btn-goal btn-goal-minus btn-sound" onclick="changeGoals(1, -1)">-</button>
+                            <div class="goals-display" id="goals-team1-display">0</div>
+                            <button class="btn-goal btn-goal-plus btn-sound" onclick="changeGoals(1, 1)">+</button>
+                        </div>
+                        <button class="btn-toggle-players btn-sound" onclick="togglePlayerList(1)">👤 Zobrazit hráče</button>
+                        <div id="player-list-1" class="player-accordion-content hidden"></div>
+                    </div>
+
+                    <div class="team-goals-box">
+                        <div class="team-goals-title" id="goals-team2-name">Tým 2</div>
+                        <div class="goals-controls">
+                            <button class="btn-goal btn-goal-minus btn-sound" onclick="changeGoals(2, -1)">-</button>
+                            <div class="goals-display" id="goals-team2-display">0</div>
+                            <button class="btn-goal btn-goal-plus btn-sound" onclick="changeGoals(2, 1)">+</button>
+                        </div>
+                        <button class="btn-toggle-players btn-sound" onclick="togglePlayerList(2)">👤 Zobrazit hráče</button>
+                        <div id="player-list-2" class="player-accordion-content hidden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🔄 Střídání hráčů</h3>
+                <div class="card-buttons-grid">
+                    <button id="btn-sub-team1" class="btn-sub-action btn-sound" onclick="openSubstitutionModal(1)">🔄 Střídat Tým 1</button>
+                    <button id="btn-sub-team2" class="btn-sub-action btn-sound" onclick="openSubstitutionModal(2)">🔄 Střídat Tým 2</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🟨 🟥 Tresty a Karty</h3>
+                <div class="card-buttons-grid">
+                    <button id="btn-trigger-yellow" class="btn-card-action yellow btn-sound">🟨 Žlutá karta</button>
+                    <button id="btn-trigger-red" class="btn-card-action red btn-sound">🟥 Červená karta</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⏱️ Přidat čas navíc</h3>
+                <div class="quick-add-buttons">
+                    <button type="button" id="btn-add-1m" class="btn-add btn-sound">+1 min</button>
+                    <button type="button" id="btn-add-2m" class="btn-add btn-sound">+2 min</button>
+                    <button type="button" id="btn-add-5m" class="btn-add btn-sound">+5 min</button>
+                </div>
+
+                <button id="btn-reset-added-time" class="btn-reset-added btn-sound">
+                    ↺ Resetovat čas navíc
+                </button>
+
+                <button id="btn-toggle-auto-finish" class="btn-option-toggle btn-sound">
+                    <span id="auto-finish-icon">❌</span> Ukončit zápas hned po uplynutí základní doby
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="card-fullscreen" class="fullscreen-card-overlay hidden">
+        <button id="btn-card-next" class="btn-card-next btn-sound">Zpět -></button>
+    </div>
+
+    <div id="select-player-modal" class="modal-overlay hidden">
+        <div class="modal-card modal-large">
+            <h2 id="card-modal-title">Vyber hráče pro kartu</h2>
+            <p id="card-modal-subtitle" style="color: var(--text-sub); font-size: 0.9rem;">Klikni na hráče, kterému uděluješ kartu</p>
+
+            <div class="players-select-grid">
+                <div class="team-select-col">
+                    <h4 id="card-select-team1-title">Tým 1</h4>
+                    <div id="card-select-team1-list" class="players-list-btn"></div>
+                </div>
+                <div class="team-select-col">
+                    <h4 id="card-select-team2-title">Tým 2</h4>
+                    <div id="card-select-team2-list" class="players-list-btn"></div>
+                </div>
+            </div>
+
+            <button id="btn-close-player-select" class="btn-back btn-sound" style="width: 100%; margin-top: 15px;">Zrušit</button>
+        </div>
+    </div>
+
+    <div id="sub-modal" class="modal-overlay hidden">
+        <div class="modal-card modal-large">
+            <h2 id="sub-modal-title">Střídání</h2>
+            <p id="sub-modal-info" style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 15px;"></p>
+            
+            <div class="sub-lists-container">
+                <div class="sub-column">
+                    <label>Jde Dolů (Ze hřiště):</label>
+                    <ul id="sub-list-off" class="sub-list"></ul>
+                </div>
+                <div class="sub-column">
+                    <label>Jde Nahoru (Ze střídačky):</label>
+                    <ul id="sub-list-on" class="sub-list"></ul>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="btn-sub-cancel" class="btn-back btn-sound" style="flex: 1;">Zrušit</button>
+                <button id="btn-sub-confirm" class="btn-start btn-sound" style="flex: 1; padding: 12px;" disabled>Provést střídání</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="time-up-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h2>🔔 Čas vypršel!</h2>
+            <p>Základní i nastavená hrací doba skončila.</p>
+
+            <div class="modal-actions">
+                <div class="add-box">
+                    <label>Přidat další minuty (max 15):</label>
+                    <input type="number" id="modal-add-input" min="1" max="15" value="2" class="input-main">
+                    <button id="btn-modal-add" class="btn-start btn-sound">Spustit další nastavení</button>
+                </div>
+                <hr style="border-color: var(--border-color); margin: 15px 0;">
+                <button id="btn-modal-finish" class="btn-back btn-sound" style="width: 100%;">Ukončit tuto část</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-confirm-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h2 id="confirm-title" style="color: var(--text-main);">Potvrzení</h2>
+            <p id="confirm-message">Opravdu chcete provést tuto akci?</p>
+            <div id="confirm-actions" style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="btn-confirm-cancel" class="btn-back btn-sound" style="flex: 1;">Zrušit</button>
+                <button id="btn-confirm-ok" class="btn-start btn-sound" style="flex: 1; padding: 12px;">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

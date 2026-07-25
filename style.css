@@ -1,0 +1,479 @@
+:root {
+    --bg-color: #080d1a;
+    --card-bg: #111a2e;
+    --card-hover: #182542;
+    --accent-green: #10b981;
+    --accent-green-glow: rgba(16, 185, 129, 0.4);
+    --accent-red: #ef4444;
+    --accent-red-glow: rgba(239, 68, 68, 0.4);
+    --accent-orange: #f97316;
+    --accent-orange-glow: rgba(249, 115, 22, 0.3);
+    --accent-yellow: #eab308;
+    --accent-blue: #0284c7;
+    --text-main: #f8fafc;
+    --text-sub: #94a3b8;
+    --border-color: #1e2d4a;
+    --input-bg: #080d1a;
+}
+
+* { 
+    box-sizing: border-box; 
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    padding: 20px 15px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container { max-width: 650px; margin: 0 auto; }
+
+.screen { display: none; }
+.screen.active { 
+    display: block; 
+    animation: screenEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+}
+
+.header-with-back { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+.header-with-back h2 { margin: 0; font-size: 1.4rem; font-weight: 800; }
+
+.btn-back {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-sub);
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.btn-back:hover { background: var(--card-hover); color: var(--text-main); }
+.btn-back:active { transform: scale(0.95); }
+
+/* BRANDING LOGO FootRef */
+.brand-title {
+    text-align: center;
+    font-size: 2.6rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #34d399, #10b981);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 25px;
+    letter-spacing: -0.5px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    padding: 18px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    animation: cardFadeIn 0.4s ease forwards;
+}
+
+.margin-top { margin-top: 25px; }
+h3 { margin-top: 0; margin-bottom: 14px; font-size: 1.05rem; font-weight: 700; }
+
+.teams-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.team-card { margin-bottom: 0; }
+
+label { display: block; font-size: 0.85rem; color: var(--text-sub); margin-bottom: 6px; margin-top: 10px; font-weight: 600; }
+
+.input-main, .input-sub, textarea, select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.input-main:focus, .input-sub:focus, textarea:focus, select:focus {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 3px var(--accent-green-glow);
+    outline: none;
+}
+
+.input-main { font-weight: 700; }
+
+.gk-box {
+    background: rgba(2, 132, 199, 0.08);
+    border: 1px dashed #0284c7;
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin-top: 12px;
+    overflow: hidden;
+    max-height: 110px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gk-box.hidden { 
+    max-height: 0; opacity: 0; padding: 0 12px; margin-top: 0; border-color: transparent; 
+    transform: translateY(-10px); pointer-events: none; 
+}
+
+.game-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.custom-option {
+    position: relative; background: var(--input-bg); border: 2px solid var(--border-color);
+    border-radius: 16px; padding: 16px 10px; cursor: pointer; text-align: center; user-select: none;
+}
+.custom-option * { pointer-events: none; }
+.custom-option input[type="radio"] { display: none; }
+.custom-option .icon { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+.custom-option .label-text { font-size: 0.9rem; font-weight: 700; color: var(--text-sub); }
+.custom-option .check-mark {
+    position: absolute; top: 8px; right: 10px; font-size: 0.85rem; font-weight: 900;
+    color: var(--accent-green); opacity: 0; transform: scale(0); transition: all 0.25s ease;
+}
+.custom-option.active { border-color: var(--accent-green); background: rgba(16, 185, 129, 0.08); }
+.custom-option.active .label-text { color: var(--text-main); }
+.custom-option.active .check-mark { opacity: 1; transform: scale(1); }
+
+.part-row { 
+    display: flex; justify-content: space-between; align-items: center; 
+    background: var(--input-bg); padding: 12px 14px; border-radius: 12px; margin-bottom: 10px; 
+    animation: fadeIn 0.3s ease;
+}
+
+.break-row {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(249, 115, 22, 0.08); border: 1px solid var(--accent-orange); color: var(--accent-orange);
+    padding: 12px 14px; border-radius: 12px; margin-bottom: 10px; font-weight: 700; font-size: 0.9rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.break-row input, .part-row input {
+    width: 65px; padding: 6px; border-radius: 8px; border: 1px solid var(--border-color);
+    background: var(--card-bg); color: var(--text-main); text-align: center; font-weight: 800;
+}
+
+.btn-add {
+    width: 100%; background: transparent; border: 2px dashed var(--accent-green);
+    color: var(--accent-green); padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer;
+}
+.btn-add:hover { background: rgba(16, 185, 129, 0.08); }
+.btn-add:active { transform: scale(0.98); }
+
+.btn-start {
+    width: 100%; background: linear-gradient(135deg, #34d399, #10b981); color: #080d1a;
+    padding: 18px; border: none; border-radius: 14px; font-size: 1.15rem; font-weight: 800;
+    cursor: pointer; box-shadow: 0 8px 25px var(--accent-green-glow);
+}
+.btn-start:hover { transform: translateY(-2px); box-shadow: 0 12px 30px var(--accent-green-glow); }
+.btn-start:active { transform: scale(0.97); }
+.btn-start:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.match-item {
+    background: var(--input-bg); border: 1px solid var(--border-color); padding: 16px;
+    border-radius: 14px; margin-bottom: 10px; cursor: pointer; display: flex;
+    justify-content: space-between; align-items: center;
+}
+.match-item:hover { border-color: var(--accent-green); background: var(--card-hover); }
+.match-item:active { transform: scale(0.98); }
+.match-item-title { font-weight: 800; font-size: 1.05rem; }
+.match-item-teams { font-size: 0.85rem; color: var(--text-sub); margin-top: 4px; }
+.empty-state { text-align: center; color: var(--text-sub); padding: 20px 0; }
+
+/* STOPKY */
+.match-header-card { text-align: center; padding: 14px; }
+.part-badge {
+    display: inline-block; background: rgba(16, 185, 129, 0.15); color: var(--accent-green);
+    padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; margin-bottom: 8px;
+}
+.teams-scoreboard { font-size: 1.2rem; font-weight: 800; }
+.teams-scoreboard .vs { color: var(--accent-orange); font-size: 0.9rem; margin: 0 8px; }
+
+.timer-card { text-align: center; padding: 25px 15px; }
+.timer-label { font-size: 0.75rem; font-weight: 800; color: var(--text-sub); letter-spacing: 1px; }
+
+.timer-digits {
+    font-size: 4rem; font-weight: 900; letter-spacing: -2px; color: var(--text-main);
+    font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(248, 250, 252, 0.1);
+}
+
+/* SKRÝVÁNÍ HORNÍHO RÁMEČKU (OBRÁZEK 2) */
+.added-timer-box {
+    margin-top: 15px; padding: 12px; background: rgba(249, 115, 22, 0.1);
+    border: 2px dashed var(--accent-orange); border-radius: 14px;
+    animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.added-timer-label { font-size: 0.75rem; font-weight: 800; color: var(--accent-orange); letter-spacing: 1px; }
+.added-timer-digits {
+    font-size: 2.8rem; font-weight: 900; color: var(--accent-orange);
+    font-variant-numeric: tabular-nums; text-shadow: 0 0 15px var(--accent-orange-glow);
+}
+
+.timer-controls { display: flex; gap: 12px; margin-top: 25px; }
+.btn-timer-ctrl { flex: 1; padding: 16px; border-radius: 12px; border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; }
+.btn-play { background: var(--accent-green); color: #080d1a; box-shadow: 0 4px 15px var(--accent-green-glow); }
+.btn-pause { background: var(--accent-orange); color: #080d1a; box-shadow: 0 4px 15px var(--accent-orange-glow); }
+.btn-reset { background: var(--input-bg); color: var(--text-sub); border: 1px solid var(--border-color); }
+.btn-timer-ctrl:active { transform: scale(0.95); }
+
+/* PÍŠŤALKA SE 3 TLAČÍTKY */
+.whistle-section {
+    margin-top: 20px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+}
+
+.whistle-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--text-sub);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.whistle-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.btn-whistle {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-main);
+    padding: 12px 6px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-whistle:hover {
+    border-color: var(--accent-blue);
+    background: var(--card-hover);
+}
+
+.btn-whistle:active {
+    transform: scale(0.92);
+    background: rgba(2, 132, 199, 0.2);
+}
+
+.btn-whistle .symbol {
+    font-size: 1.2rem;
+    color: var(--accent-blue);
+    font-weight: 900;
+}
+
+.btn-whistle .label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-sub);
+}
+
+/* POČÍTADLO GÓLŮ & HRÁČI */
+.goals-counter-wrapper { display: flex; gap: 12px; align-items: flex-start; }
+
+.team-goals-box {
+    flex: 1; background: var(--input-bg); border: 1px solid var(--border-color);
+    padding: 12px; border-radius: 14px; text-align: center;
+}
+
+.team-goals-title {
+    font-size: 0.85rem; font-weight: 700; color: var(--text-sub); margin-bottom: 10px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.goals-controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+.goals-display {
+    font-size: 2.2rem; font-weight: 900; color: var(--text-main); background: var(--card-bg);
+    border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 10px; min-width: 45px;
+}
+
+.btn-goal {
+    width: 38px; height: 38px; border-radius: 10px; border: none; font-size: 1.3rem;
+    font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+
+.btn-goal-plus { background: var(--accent-green); color: #080d1a; box-shadow: 0 4px 12px var(--accent-green-glow); }
+.btn-goal-minus { background: var(--accent-red); color: #ffffff; box-shadow: 0 4px 12px var(--accent-red-glow); }
+.btn-goal:active { transform: scale(0.88); }
+
+/* TLAČÍTKA A ROZBALOVACÍ SEZNAM HRÁČŮ */
+.btn-toggle-players {
+    width: 100%; margin-top: 12px; background: var(--card-bg); border: 1px solid var(--border-color);
+    color: var(--text-sub); padding: 8px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+}
+.btn-toggle-players:hover { background: var(--card-hover); color: var(--text-main); }
+.btn-toggle-players:active { transform: scale(0.96); }
+
+.player-accordion-content {
+    margin-top: 10px; text-align: left; background: var(--card-bg); border: 1px solid var(--border-color);
+    border-radius: 10px; padding: 10px; font-size: 0.85rem; max-height: 200px; overflow-y: auto;
+    animation: accordionOpen 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.player-item-row {
+    padding: 6px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex; justify-content: space-between; align-items: center; font-weight: 600;
+}
+.player-item-row:last-child { border-bottom: none; }
+.card-icon { font-size: 0.9rem; margin-left: 4px; }
+
+/* STŘÍDÁNÍ A KARTY */
+.card-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.btn-sub-action {
+    padding: 12px; border-radius: 12px; border: 1px solid var(--accent-blue);
+    background: rgba(2, 132, 199, 0.1); color: #38bdf8; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; text-align: center;
+}
+.btn-sub-action:disabled { opacity: 0.4; cursor: not-allowed; border-color: var(--border-color); color: var(--text-sub); }
+.btn-sub-action:not(:disabled):active { transform: scale(0.95); background: rgba(2, 132, 199, 0.25); }
+
+.btn-card-action {
+    padding: 14px; border-radius: 12px; border: none; font-weight: 800; font-size: 0.95rem;
+    cursor: pointer; text-align: center;
+}
+.btn-card-action.yellow { background: var(--accent-yellow); color: #080d1a; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3); }
+.btn-card-action.red { background: var(--accent-red); color: #ffffff; box-shadow: 0 4px 15px var(--accent-red-glow); }
+.btn-card-action:active { transform: scale(0.95); }
+
+/* MODAL STŘÍDÁNÍ - 2 SEZNAMY (OBRÁZEK 1) */
+.sub-lists-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 15px;
+    text-align: left;
+}
+
+.sub-column label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-sub);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.sub-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--input-bg);
+}
+
+.sub-list li {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.sub-list li:hover {
+    background: var(--card-hover);
+}
+
+.sub-list li.selected {
+    background: var(--accent-green);
+    color: #080d1a;
+    font-weight: 800;
+}
+
+/* CELOOBRAZOVKOVÝ MODAL PRO ZOBRAZENÍ KARTY (BEZ TEXTU) */
+.fullscreen-card-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 2000; display: flex; flex-direction: column; justify-content: flex-end;
+    align-items: center; padding: 40px 20px; animation: cardFlash 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.fullscreen-card-overlay.yellow-bg { background-color: #eab308; }
+.fullscreen-card-overlay.red-bg { background-color: #ef4444; }
+
+.btn-card-next {
+    background: #080d1a; color: #ffffff; border: none;
+    padding: 16px 32px; border-radius: 16px; font-weight: 800; font-size: 1.2rem;
+    cursor: pointer; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+.btn-card-next:active { transform: scale(0.92); }
+
+/* SEZNAM HRÁČŮ V MODALU */
+.modal-large { max-width: 520px; }
+.players-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; text-align: left; }
+.team-select-col h4 { margin: 0 0 10px 0; color: var(--accent-green); font-size: 0.9rem; }
+
+.players-list-btn { display: flex; flex-direction: column; gap: 6px; max-height: 250px; overflow-y: auto; }
+
+.btn-select-player {
+    background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main);
+    padding: 10px; border-radius: 10px; text-align: left; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+}
+.btn-select-player:hover { border-color: var(--accent-green); background: var(--card-hover); }
+.btn-select-player:active { transform: scale(0.96); }
+
+/* RYCHLÉ ČASOVAČE & TLAČÍTKA */
+.quick-add-buttons { display: flex; gap: 10px; }
+.quick-add-buttons button { flex: 1; text-align: center; font-size: 1rem; }
+
+.btn-reset-added {
+    width: 100%; background: transparent; border: 1px solid var(--accent-orange); color: var(--accent-orange);
+    padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; margin-top: 12px;
+}
+.btn-reset-added:hover { background: rgba(249, 115, 22, 0.1); }
+.btn-reset-added:active { transform: scale(0.97); }
+
+.btn-option-toggle {
+    width: 100%; background: var(--input-bg); border: 1px solid var(--border-color);
+    color: var(--text-sub); padding: 12px; border-radius: 12px; font-size: 0.85rem;
+    font-weight: 700; cursor: pointer; text-align: left; display: flex; align-items: center;
+    gap: 8px; margin-top: 10px;
+}
+.btn-option-toggle.active { border-color: var(--accent-orange); color: var(--accent-orange); background: rgba(249, 115, 22, 0.08); }
+
+/* MODALY & KLÍČOVÉ ANIMACE */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000;
+    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-card {
+    background: var(--card-bg); border: 1px solid var(--border-color);
+    padding: 25px; border-radius: 20px; max-width: 400px; width: 100%; text-align: center;
+    animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-card h2 { color: var(--text-main); margin-top: 0; }
+.hidden { display: none !important; }
+
+@keyframes screenEnter { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cardFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+@keyframes cardFlash { from { opacity: 0; transform: scale(1.08); } to { opacity: 1; transform: scale(1); } }
+@keyframes accordionOpen { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 480px) {
+    .teams-grid { grid-template-columns: 1fr; }
+}
