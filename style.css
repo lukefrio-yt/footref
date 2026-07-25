@@ -477,3 +477,12 @@ label { display: block; font-size: 0.85rem; color: var(--text-sub); margin-botto
 @media (max-width: 480px) {
     .teams-grid { grid-template-columns: 1fr; }
 }
+
+/* Oprava oříznutí týmu na mobilních displejích */
+.goals-counter-wrapper {
+    flex-wrap: wrap !important;
+}
+
+.team-goals-box {
+    min-width: 100% !important;
+}
