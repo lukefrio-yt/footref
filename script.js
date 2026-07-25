@@ -664,7 +664,7 @@ function startTimer() {
     isTimerRunning = true;
 
     const btn = document.getElementById('btn-toggle-timer');
-    btn.innerText = '⏸ Pozastavit';
+    btn.innerText = 'Pozastavit';
     btn.className = 'btn-timer-ctrl btn-pause btn-sound';
 
     timerInterval = setInterval(() => {
